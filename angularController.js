@@ -1,9 +1,12 @@
 
-var searchInput = [];
+var searchInput = "";
+var userID = Math.random()* 1000000000;
+
+//TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
-        searchInput = document.getElementById("search-input").value.split(" ");
+        searchInput = document.getElementById("search-input").value;
         sendData();
 
     };
@@ -18,7 +21,22 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     };
 
     function sendData() {
-        var data = JSON.stringify(searchInput);
+        var data = {
+            "contextKeywords":[
+                {
+                    "text":"Douglas Adams",
+                }
+            ],
+            "origin": {
+                "clientType": "EEXCESS Advanced Search UNI PASSAU",
+                "clientVersion": "1000.0",
+                "module": "curl command line",
+                "userID": userID
+            }
+        };
+
+
+        //data = JSON.stringify(searchInput);
         console.log(searchInput);
         console.log(data);
 
