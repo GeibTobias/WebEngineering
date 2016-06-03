@@ -1,13 +1,13 @@
 var numResults = 50;
 
-var searchInput = [];
+var searchInput = "";
 var userID = Math.random()* 1000000000;
 
 //TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
-        searchInput = document.getElementById("search-input").value.split(" ");
+        searchInput = document.getElementById("search-input").value;
         sendData();
 
     };
@@ -21,11 +21,35 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         console.log("error")
     };
 
+    function validation() {
+        //TODO
+    }
+    
+    function evaluation() {
+        //TODO
+    }
+
+    function mainAndSplit(){
+        var charInput;
+        var bracketCounter;
+        for(var i=0 ; i < searchInput.length; i++ ) {
+            charInput = searchInput.toLowerCase();
+            charInput = searchInput.charAt(i);
+
+            if(charInput = '(') {
+
+            } else if(charInput = ')') {
+
+            }
+        }
+    }
+
     function sendData() {
+        var main;
         var out;
+        searchInput = searchInput.split(")");
         for (var i=0; i<searchInput.length; i++) {
-            out += '{ /n "text:';
-            out += searchInput[0]
+
 
         }
         out += "}";
