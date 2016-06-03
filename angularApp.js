@@ -1,2 +1,2 @@
 
-var app = angular.module("EECXESSSearch", []);
+var app = angular.module("EEXCESSSearch", []);
