@@ -1,9 +1,5 @@
-var numResults = 50;
-
-var searchInput = "";
-var userID = Math.random()* 1000000000;
-
-//TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
+var numResults = 10;
+var searchInput ="";
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
@@ -24,34 +20,55 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     function validation() {
         //TODO
     }
-    
+
     function evaluation() {
         //TODO
     }
 
     function mainAndSplit(){
         var charInput;
-        var bracketCounter;
+        var bracketCounter = 0;
+        var mainString = "";
+        var secString = "";
+
         for(var i=0 ; i < searchInput.length; i++ ) {
-            charInput = searchInput.toLowerCase();
-            charInput = searchInput.charAt(i);
+            charInput = String(searchInput).charAt(i);
 
-            if(charInput = '(') {
-
-            } else if(charInput = ')') {
-
+            if(!(i == 0 && charInput != '(')){
+                if(charInput == '(') {
+                    bracketCounter += 1;
+                } else if(charInput == ')') {
+                    bracketCounter += -1;
+                }
+            }
+            if(bracketCounter == 0) {
+                break;
             }
         }
+
+        var secBool =  false;
+        for(var j = 0; j < searchInput.length; j++) {
+            charInput = String(searchInput).charAt(j);
+
+            if(j <= i) {
+                mainString += charInput;
+
+            } else if(charInput == '(') {
+                secBool = true;
+            }
+            if(secBool) {
+                secString += charInput;
+            }
+        }
+
+        console.log(mainString);
+        console.log(secString);
+
     }
 
     function sendData() {
         var main;
         var out;
-        searchInput = searchInput.split(")");
-        for (var i=0; i<searchInput.length; i++) {
-
-
-        }
         out += "}";
         var data = {
             "contextKeywords":[
@@ -76,6 +93,13 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         };
 
+        mainAndSplit();
+        
         $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
     }
 }]);
+var searchInput = "";
+
+var userID = Math.random()* 1000000000;
+
+//TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
