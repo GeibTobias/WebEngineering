@@ -1,12 +1,13 @@
+var numResults = 50;
 
-var searchInput = "";
+var searchInput = [];
 var userID = Math.random()* 1000000000;
 
 //TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
-        searchInput = document.getElementById("search-input").value;
+        searchInput = document.getElementById("search-input").value.split(" ");
         sendData();
 
     };
@@ -21,12 +22,18 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     };
 
     function sendData() {
+        var out;
+        for (var i=0; i<searchInput.length; i++) {
+            out += '{ /n "text:';
+            out += searchInput[0]
+
+        }
+        out += "}";
         var data = {
             "contextKeywords":[
-                {
-                    "text":"Douglas Adams",
-                }
+                out
             ],
+            "numResults" : numResults,
             "origin": {
                 "clientType": "EEXCESS Advanced Search UNI PASSAU",
                 "clientVersion": "1000.0",
@@ -35,8 +42,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         };
 
-
-        //data = JSON.stringify(searchInput);
         console.log(searchInput);
         console.log(data);
 
