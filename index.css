@@ -1,0 +1,174 @@
+.body{
+    background-color: white;
+    font-family: SansSerif;
+    font-weight: bold;
+    border-color: darkgray;
+    color: gray;
+}
+
+#title{
+    margin: 0px;
+    border-bottom-color: darkgray;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-top-color: darkgray;
+    border-top-style: solid;
+    border-top-width: 2px;
+    background-image: url("data/uni-icon.png");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 9em;
+    background-position: right center;
+    padding-left: 15px;
+    font-size: 1em;
+}
+
+#inner-container{
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+#input-container{
+    width: 100%;
+    background: url("data/search-icon.png");
+    background-attachment: scroll;
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: 1em 1em;
+}
+
+#search-input{
+    width: 100%;
+    height: 30px;
+    border-style: solid;
+    border-width: 2px;
+    padding-left: 7px;
+    background-color: transparent;
+    border-color: darkgray;
+    font-size: 1em;
+    color: grey;
+}
+
+#search-collect{
+    margin-top: 10px;
+}
+
+#search-selector{
+    width: 15%;
+    margin-right: 0px;
+    margin-left: 0px;
+    float: left;
+}
+
+#search-results-container{
+    width: 80%;
+    float: right;
+    padding-left: 5px;
+}
+
+.switch-field {
+    padding: 5px;
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+}
+
+.switch-field input {
+    display: none;
+}
+
+.switch-field label {
+    float: left;
+}
+
+.switch-field label {
+    display: inline-block;
+    width: 49%;
+    height: 100%;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.6);
+    color: grey;
+    text-align: center;
+    text-shadow: none;
+    border: 1px solid;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition:    all 0.1s ease-in-out;
+    -ms-transition:     all 0.1s ease-in-out;
+    -o-transition:      all 0.1s ease-in-out;
+    transition:         all 0.1s ease-in-out;
+}
+
+.switch-field label:hover {
+    cursor: pointer;
+}
+
+.switch-field input:checked + label {
+    background-color: #008cff;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: white;
+}
+
+.switch-field label:first-of-type {
+    border-radius: 10px 0 0 10px;
+}
+
+.switch-field label:last-of-type {
+    border-radius: 0 10px 10px 0;
+}
+
+.category{
+    width: 100%;
+    background-color: transparent;
+    padding-left: 5px;
+    margin-bottom: 20px;
+    min-height: 45px;
+}
+
+.category-header{
+    margin-top: 0px;
+    margin-left: 20px;
+    heigth: 20px;
+//width: 70%;
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    border-radius: 7px;
+    background-color: #008cff;
+    text-align: center;
+    color: white;
+    font-size: 1vw;
+    font-weight: bold;
+    left: 15px;
+    position: absolute;
+    z-index: 2;
+
+}
+
+.category-content{
+    margin-top: 0px;
+    width: 100%;
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    border-radius: 10px;
+    background: transparent;
+    position: relative;
+    padding-top: 30px;
+}
+
+.ceckbox-container{
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-left: 3px;
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+}
+
+.checkbox{
+    background-color: darkgray;
+}
