@@ -1,10 +1,11 @@
 
 var searchInput = [];
 
-
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
-    $scope.putin = function(searchTerm) {
-        searchInput = angular.copy(searchTerm).split(" ");
+    $scope.putin = function() {
+        searchInput = document.getElementById("search-input").value.split(" ");
+        sendData();
+
     };
 
 
@@ -16,9 +17,18 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         console.log("error")
     };
 
-    var data = JSON.parse("{}");
+    function sendData() {
+        var data = JSON.stringify(searchInput);
+        console.log(searchInput);
+        console.log(data);
 
-    $http.post('/https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data).then(successCallback, errorCallback);
+        var config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
 
-    console.log(searchInput.toString());
+        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
+    }
 }]);
