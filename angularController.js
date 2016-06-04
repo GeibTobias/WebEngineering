@@ -235,20 +235,23 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         };
 
-        /*
-        $http({
-            method: 'GET',
-            url: '/someUrl'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-        }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-        });
-        */
 
-        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', jsonData, config).then(successCallback, errorCallback);
+        $http({
+            method: 'POST',
+            url: 'https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend',
+            data: jsonData,
+            config: config
+        }).then(function successCallback(response) {
+            //var jsonResponse = JSON.parse(response);
+            console.log(response.data.result);
+            console.log("success");
+
+        }, function errorCallback(response) {
+            console.log("err")
+        });
+
+
+        //$http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', jsonData, config).then(successCallback, errorCallback);
     }
 }]);
 
