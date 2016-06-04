@@ -93,7 +93,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     }
 
     function evaluation() {
-
+        out = "";
         var charAt;
         var newMain= "";
         var newSec= "";
