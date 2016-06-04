@@ -245,6 +245,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             //var jsonResponse = JSON.parse(response);
             console.log(response.data.result);
             console.log("success");
+            for(var i = 0; i < data.result.length; ){
+                
+            }
 
         }, function errorCallback(response) {
             console.log("err")
