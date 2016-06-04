@@ -245,9 +245,11 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             //var jsonResponse = JSON.parse(response);
             console.log(response.data.result);
             console.log("success");
-            for(var i = 0; i < Array(data.result).length; i++){
+            for(var i = 0; i < response.data.result.length; i++){
+
                 console.log(response.data.result[i].title)
             }
+
 
         }, function errorCallback(response) {
             console.log("err")
