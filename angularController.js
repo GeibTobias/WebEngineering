@@ -25,26 +25,68 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         var op=0, cl=0;
         var charAt;
         var concANDAt;
+        var concANDAtSet = false;
+        // valid if countNBracketAND < 2
+        var countNBracketAND = 0;
         for(var i=0; i<input.length; i++){
-            charAt = input.charAt(i);
-            if(charAt == "("){op++;}
-            if(charAt == ")"){cl++;}
-            if (i != 0 && i != input.length-1 && op == cl){concANDAt = i;}
-        }
-
-        var andOr = input.split(/\s/);
-        // valid if: !twoFollowing
-        var twoFollowing = false, lastOperator = false;
-        for(var i=0; i<andOr.length; i++) {
-            // TODO: AND und OR nicht nach Klammer-Auf und nicht vor Klammer-Zu
-            if("AND".localeCompare(andOr(i)) || "OR".localeCompare(andOr(i))){
-                if(lastOperator){twoFollowing = true;}
-                else {lastOperator = true;}
-            } else {lastOperator = false;}
-            if("(".localeCompare(andOr(i)) || ")".localeCompare(andOr(i))){
-                lastOperator = true;
+            charAt = String(input).charAt(i);
+            if(!"(".localeCompare(charAt)){op++;}
+            if(!")".localeCompare(charAt)){cl++;}
+            if (i != 0 && i != input.length-1 && concANDAtSet && op == cl){
+                if(!concANDAtSet){concANDAt = i;}
+                countNBracketAND ++;
             }
         }
+
+        // valid if exactOneNBracketAND
+        var exactOneNBrachetAND = true;
+        if(countNBracketAND == 1) {
+            var arr = String(input).substring(concANDAt + 1, String(input).length).split(/\s/);
+            if("AND".localeCompare(arr[0])){exactOneNBrachetAND = false;}
+        }
+
+        var andOr = input.replace(/\(/gi, " ( ").replace(/\)/gi, " ) ").split(/\s/);
+        console.log(andOr);
+        // valid if: !twoFollowing
+        var twoFollowing = false;
+        // valid if countOp - 1 == countNOp
+        var countOp = 0, countNOp = 0;
+        /*
+         * -1 if last element was AND || OR
+         *  1 if last element was "("
+         *  0 else
+         */
+        var lastOp = 0;
+        for(var i=0; i<andOr.length; i++) {
+            if(!"AND".localeCompare(andOr[i]) || !"OR".localeCompare(andOr[i])){
+                if(lastOp == 1 || lastOp == -1){
+                    twoFollowing = true;
+                    break;
+                } else {lastOp = -1;}
+                countOp ++;
+            } else if(!")".localeCompare(andOr[i])) {
+                if (lastOp == 1 || lastOp == -1) {
+                    twoFollowing = true;
+                    break;
+                }
+            } else if(!"(".localeCompare(andOr[i])) {
+                lastOp = 1;
+            } else {
+                if("".localeCompare(andOr[i])) {
+                    lastOp = 0;
+                    countNOp ++;
+                }
+            }
+        }
+        /*
+        console.log("Number Brackets: " + String(op == cl));
+        console.log("Number non-bracket parts:" + String(countNBracketAND < 2));
+        console.log("One non-bracket-part is AND:" + exactOneNBrachetAND);
+        console.log("Correct order of arguments:" + !twoFollowing);
+        console.log("Correct number of arguments and operators:" + String(countOp == countNOp - 1));
+        console.log("###########################################");
+        */
+        return (op == cl && countNBracketAND < 2 && exactOneNBrachetAND && !twoFollowing && countOp == countNOp - 1);
     }
 
     function evaluation() {
@@ -86,10 +128,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 secString += charInput;
             }
         }
-
-        console.log(mainString);
-        console.log(secString);
-
     }
 
     function sendData() {
@@ -108,9 +146,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 "userID": userID
             }
         };
-
-        console.log(searchInput);
-        console.log(data);
 
         var config = {
             headers: {
