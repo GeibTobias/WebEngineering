@@ -5,7 +5,7 @@ checkCookie();
 if(checkCookie()){
     userID = getCookie("UUID");
 } else {
-    userID = guid();
+    userID = Math.floor(Math.random()*100000000000);
     setCookie("UUID", userID.toString(), 10);
 }
 var mainString = "";
@@ -18,9 +18,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         sendData();
     };
 
-
-    successCallback = function () {
+    successCallback = function (response) {
         console.log("success")
+        console.log(response);
     };
 
     errorCallback = function () {
@@ -98,7 +98,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 
 
     function evaluation() {
-        out = "";
+        out = "\"contextKeywords\":[";
         var charAt;
         var newMain= "";
         var newSec= "";
@@ -153,6 +153,8 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
             out += "\",\n\t\"isMainTopic\" : false \n }";
         }
+
+        out += "],";
 
         console.log(out)
 
@@ -211,18 +213,20 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         } else {
             console.log("Sie sind behindert.")
         }
-        var data = {
-            "contextKeywords":[
-                out
-            ],
-            "numResults" : numResults,
-            "origin": {
-                "clientType": "EEXCESS Advanced Search UNI PASSAU",
-                "clientVersion": "1000.0",
-                "module": "curl command line",
-                "userID": userID
-            }
-        };
+        var data = "{"
+            + "\n" + out
+            + "\n\"numResults\":" + numResults + ","
+            + "\n\"origin\": {"
+                +"\n\"clientType\": \"EEXCESS Advanced Search UNI PASSAU\","
+                +"\n\"clientVersion\": \"1000.0\","
+                +"\n\"userID\":" + String(userID) + ","
+                +"\n\"module\": \"curl command line\""
+            +"\n}"
+        +"\n}";
+
+        console.log(data);
+
+        var jsonData = JSON.parse(data);
 
         var config = {
             headers: {
@@ -232,7 +236,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         };
 
 
-        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
+        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', jsonData, config).then(successCallback, errorCallback);
     }
 }]);
 
