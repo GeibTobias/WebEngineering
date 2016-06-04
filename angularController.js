@@ -242,14 +242,10 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             data: jsonData,
             config: config
         }).then(function successCallback(response) {
-            //var jsonResponse = JSON.parse(response);
-            console.log(response.data.result);
-            console.log("success");
-            for(var i = 0; i < response.data.result.length; i++){
-
-                console.log(response.data.result[i].title)
+            var arr = response.data.result;
+            for(var i = 0; i < arr.length; i++){
+                console.log(arr[i].title)
             }
-
 
         }, function errorCallback(response) {
             console.log("err")
