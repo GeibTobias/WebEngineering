@@ -19,13 +19,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     };
 
 
-    successCallback = function () {
-        console.log("success")
-    };
 
-    errorCallback = function () {
-        console.log("error")
-    };
 
     function validation(input) {
         // valid if: op == cl
@@ -231,8 +225,20 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         };
 
+        /*
+        $http({
+            method: 'GET',
+            url: '/someUrl'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+        */
 
-        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
+        $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback(response), errorCallback(response));
     }
 }]);
 
