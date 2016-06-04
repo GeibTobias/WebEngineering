@@ -1,17 +1,21 @@
 var numResults = 10;
 var searchInput = "";
-var userID = Math.random()* 1000000000;
+var userID;
+checkCookie();
+if(checkCookie()){
+    userID = getCookie("UUID");
+} else {
+    userID = guid();
+    setCookie("UUID", userID.toString(), 10);
+}
 var mainString = "";
 var secString = "";
 var out = "";
-
-//TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
-
     };
 
 
@@ -217,3 +221,41 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
     }
 }]);
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    var user = getCookie("UUID");
+    if (user != "") {
+        console.log("Welcome again " + user);
+        return true;
+    }
+    return false;
+}
+
+function guid(){
+    function s4(){
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
+}
