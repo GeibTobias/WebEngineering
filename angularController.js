@@ -1,6 +1,9 @@
 var numResults = 10;
 var searchInput = "";
 var userID = Math.random()* 1000000000;
+var mainString = "";
+var secString = "";
+var out = "";
 
 //TODO: MOUSE POINTER IN SEARCHLINE SETZTEN
 
@@ -48,14 +51,70 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     }
 
     function evaluation() {
-        //TODO
+
+        var charAt;
+        var newMain= "";
+        var newSec= "";
+        for(var l = 0; l < mainString.length; l++){
+            charAt = String(mainString.charAt(l));
+            if(!(charAt == '(' || charAt == ')' || charAt == " ")){
+                newMain += charAt;
+            }
+        }
+
+        for(var l = 0; l < secString.length; l++){
+            charAt = String(secString.charAt(l));
+            if(!(charAt == '(' || charAt == ')' || charAt == " ")){
+                newSec += charAt;
+            }
+        }
+
+        console.log(newMain);
+        console.log(newSec);
+
+        var mainOrSplit = newMain.split("OR");
+        var secOrSplit  = newSec.split("OR");
+        //Maintopic JSON gen
+        for (var i = 0; i < mainOrSplit.length; i++) {
+            if(i == 0) {
+                out += "{ \n";
+            } else {
+                out += ", { \n";
+            }
+            var mainAndSplit = mainOrSplit[i].split("AND");
+            out +="\t\"text\" : \"";
+            for(var j = 0; j < mainAndSplit.length; j++) {
+                if(j == 0) {
+                    out += mainAndSplit[j];
+                } else {
+                    out += " " + mainAndSplit[j];
+                }
+            }
+            out += "\", \n\t\"isMainTopic\" : true \n }";
+        }
+        //Secundar JSON gen
+        for (var i = 0; i < secOrSplit.length; i++) {
+            out += ", { \n";
+            var secAndSplit = secOrSplit[i].split("AND");
+            out +="\t\"text\" : \"";
+            for(var j = 0; j < secAndSplit.length; j++) {
+                if(j == 0) {
+                    out += secAndSplit[j];
+                } else {
+                    out += " " + secAndSplit[j];
+                }
+            }
+            out += "\",\n\t\"isMainTopic\" : false \n }";
+        }
+
+        console.log(out)
+
     }
 
     function mainAndSplit(){
         var charInput;
         var bracketCounter = 0;
-        var mainString = "";
-        var secString = "";
+
 
         for(var i=0 ; i < searchInput.length; i++ ) {
             charInput = String(searchInput).charAt(i);
@@ -87,15 +146,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         }
 
-        console.log(mainString);
-        console.log(secString);
-
     }
 
     function sendData() {
-        var main;
-        var out;
-        out += "}";
         var data = {
             "contextKeywords":[
                 out
@@ -120,7 +173,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         };
 
         mainAndSplit();
-        
+
+        evaluation();
+
         $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
     }
 }]);
