@@ -49,7 +49,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
 
         var andOr = input.replace(/\(/gi, " ( ").replace(/\)/gi, " ) ").split(/\s/);
-        console.log(andOr);
+        //console.log(andOr);
         // valid if: !twoFollowing
         var twoFollowing = false;
         // valid if countOp - 1 == countNOp
@@ -92,6 +92,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         return (op == cl && countNBracketAND < 2 && exactOneNBrachetAND && !twoFollowing && countOp == countNOp - 1);
     }
 
+
     function evaluation() {
         out = "";
         var charAt;
@@ -111,8 +112,8 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         }
 
-        console.log(newMain);
-        console.log(newSec);
+       // console.log(newMain);
+       // console.log(newSec);
 
         var mainOrSplit = newMain.split("OR");
         var secOrSplit  = newSec.split("OR");
@@ -156,19 +157,20 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     function mainAndSplit(){
         var charInput;
         var bracketCounter = 0;
-
+        var bracketExist = false;
 
         for(var i=0 ; i < searchInput.length; i++ ) {
             charInput = String(searchInput).charAt(i);
 
-            if(!(i == 0 && charInput != '(')){
+
                 if(charInput == '(') {
                     bracketCounter += 1;
+                    bracketExist = true;
                 } else if(charInput == ')') {
                     bracketCounter += -1;
                 }
-            }
-            if(bracketCounter == 0) {
+
+            if(bracketCounter == 0 && bracketExist) {
                 break;
             }
         }
@@ -187,9 +189,24 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 secString += charInput;
             }
         }
+        console.log(mainString);
+        console.log(secString);
     }
 
     function sendData() {
+
+        mainString = "";
+        secString  = "";
+        out = "";
+
+        //console.log(searchInput);
+
+        if (validation(searchInput)) {
+            mainAndSplit();
+            evaluation();
+        } else {
+            console.log("Sie sind behindert.")
+        }
         var data = {
             "contextKeywords":[
                 out
@@ -210,9 +227,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         };
 
-        mainAndSplit();
-
-        evaluation();
 
         $http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', data, config).then(successCallback, errorCallback);
     }
