@@ -11,6 +11,7 @@ if(checkCookie()){
 var mainString = "";
 var secString = "";
 var out = "";
+var mediaType = [], language = [], date = [], provider = [];
 
 app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
@@ -242,10 +243,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             data: jsonData,
             config: config
         }).then(function successCallback(response) {
-            var arr = response.data.result;
-            for(var i = 0; i < arr.length; i++){
-                console.log(arr[i].title)
-            }
+            createFilter(response);
 
         }, function errorCallback(response) {
             console.log("err")
@@ -287,9 +285,42 @@ function checkCookie() {
     return false;
 }
 
-function guid(){
-    function s4(){
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+function createFilter(response){
+    var resp = response.data;
+    var totalResults = resp.totalResults;
+    for(var i=0; i<totalResults; i++) {
+        if(mediaType.indexOf(resp.result[i].mediaType) == -1) {
+            mediaType.push(resp.result[i].mediaType);
+        }
+        if(language.indexOf(resp.result[i].language) == -1 && "unknown".localeCompare(resp.result[i].language)) {
+            language.push(resp.result[i].language);
+        }
+        if("unknown".localeCompare(resp.results[i].date)) {
+            var decade = String(rest.results[i].date).substring(0, 2) + "0";
+            if(date.indexOf(resp.result[i].date) == -1) {
+                date.push(resp.result[i].date);
+            }
+        }
+        if(provider.indexOf(resp.result[i].documentBadge.provider) == -1
+            && "unknown".localeCompare(resp.result[i].documentBadge.provider)) {
+            provider.push(resp.result[i].documentBadge.provider);
+        }
     }
-    return s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
+    var elemAt;
+    var firstHTML = ;
+    var secondHTm = ;
+    if(mediaType.length > 1) {
+        elemAt = document.getElementById("search-selector");
+        elemAt.innerHTML = elemAt.innerHTML + "<div class=\"category\"><div class=\"category-header\"><div class=\"category-content\">
+        <div class=\"checkbox-container\"><input type=\"checkbox\" class=\"checkbox\">Hai</input></div></div> </div>"
+    }
+    if(language.length > 1) {
+
+    }
+    if(date.length > 1) {
+
+    }
+    if(provider.length > 1) {
+
+    }
 }
