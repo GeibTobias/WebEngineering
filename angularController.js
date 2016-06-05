@@ -256,11 +256,10 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 
 function generateOutput(response) {
     var elemAt = document.getElementById("search-results");
-    elemAt.innerHTML = "<div class=result>";
+    elemAt.innerHTML = "";
     for(var i = 0; i < response.data.result.length; i++){
-        elemAt.innerHTML += (response.data.result[i].title);
+        elemAt.innerHTML += "<div class=result>" + (response.data.result[i].title) + "</div>";
     }
-    elemAt.innerHTML += "</div>";
     
 
 
