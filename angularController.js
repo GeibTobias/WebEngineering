@@ -19,15 +19,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         sendData();
     };
 
-    successCallback = function (response) {
-        console.log("success")
-        console.log(response);
-    };
-
-    errorCallback = function () {
-        console.log("error")
-    };
-
     function validation(input) {
         // valid if: op == cl
         var op=0, cl=0;
@@ -248,9 +239,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }, function errorCallback(response) {
             console.log("err")
         });
-
-
-        //$http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', jsonData, config).then(successCallback, errorCallback);
     }
 }]);
 
@@ -298,6 +286,7 @@ function checkCookie() {
 }
 
 function createFilter(response){
+    mediaType = []; language = []; date = []; provider = [];
     var resp = response.data;
     var totalResults = resp.totalResults;
     for(var i=0; i<totalResults; i++) {
@@ -320,9 +309,6 @@ function createFilter(response){
     }
     var elemAt = document.getElementById("search-selector");
     elemAt.innerHTML = "";
-    var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
-    var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
-    var input = "<input type=\"checkbox\" class=\"checkbox\">";
     if(mediaType.length > 1) {
         elemAt.innerHTML = generateCategory("Media", mediaType);
     }
@@ -345,9 +331,8 @@ function createFilter(response){
             //TODO: angular ng-model einfuegen
             checkBox += "<tr><td>" + input + arr[i] + "</td></tr></input>";
         }
-        checkBox += "</table>"
+        checkBox += "</table>";
         var output = elemAt.innerHTML + firstHTML + header + "</div>" + secondHTML + checkBox + "</form></div></div></div>";
-        console.log(output);
         return output;
     }
 }
