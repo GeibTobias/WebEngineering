@@ -257,12 +257,12 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 function generateOutput(response) {
     var elemAt = document.getElementById("search-results");
     elemAt.innerHTML = "";
+    console.log(response.data.result);
     for(var i = 0; i < response.data.result.length; i++){
-        elemAt.innerHTML += "<div class=result>" + (response.data.result[i].title) + "</div>";
+        var url = response.data.result[i].documentBadge.uri;
+        var title =response.data.result[i].title;
+        elemAt.innerHTML += "<div class=result>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
     }
-    
-
-
 
 }
 
