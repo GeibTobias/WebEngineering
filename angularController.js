@@ -249,9 +249,20 @@ function generateOutput(response) {
     elemAt.innerHTML = "";
     console.log(response.data.result);
     for(var i = 0; i < response.data.result.length; i++){
-        var url = response.data.result[i].documentBadge.uri;
-        var title =response.data.result[i].title;
-        elemAt.innerHTML += "<div class=result>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
+        var result = response.data.result[i];
+        var url = result.documentBadge.uri;
+        var img = result.previewImage;
+        var title = result.title;
+        if(result.mediaType != "IMAGE"){
+            elemAt.innerHTML += "<div class=textresult>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
+        } else {
+            if(typeof result.previewImage !== 'undefined') {
+                elemAt.innerHTML += "<div class=imgresult>" +"<img src=" + img + "alt="+ title + "style=\"width:304px;height:228px;\">";
+            } else {
+                elemAt.innerHTML += "<div class=imgresult>" +"<img src=" + url + "alt="+ title + "style=\"width:304px;height:228px;\">";
+            }
+        }
+
     }
 
 }
