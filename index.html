@@ -34,6 +34,10 @@
             </div>
             <div id="search-results" name="search-results" alt="search-results">
                 <!-- Search-results are displayed in this container -->
+
+                <div class="textresult" ng-repeat="x in initInput | filter:checkBoxModel">
+                        <a href={{x.documentBadge.uri}} > {{x.title}}</a>
+                </div>
             </div>
         </div>
     </div>

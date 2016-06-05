@@ -1,6 +1,7 @@
 var numResults = 10;
 var searchInput = "";
 var userID;
+var checkBoxModel = Object();
 checkCookie();
 if(checkCookie()){
     userID = getCookie("UUID");
@@ -18,6 +19,12 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
+    };
+
+    $scope.checkBoxModel = checkBoxModel;
+    $scope.initInput = [];
+    $scope.doFilter = function(result){
+
     };
 
     function validation(input) {
@@ -46,7 +53,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
 
         var andOr = input.replace(/\(/gi, " ( ").replace(/\)/gi, " ) ").split(/\s/);
-        //console.log(andOr);
         // valid if: !twoFollowing
         var twoFollowing = false;
         // valid if countOp - 1 == countNOp
@@ -109,9 +115,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             }
         }
 
-       // console.log(newMain);
-       // console.log(newSec);
-
         var mainOrSplit = newMain.split("OR");
         var secOrSplit  = newSec.split("OR");
         //Maintopic JSON gen
@@ -148,8 +151,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
 
         out += "],";
-
-        console.log(out)
 
     }
 
@@ -188,8 +189,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 secString += charInput;
             }
         }
-        console.log(mainString);
-        console.log(secString);
     }
 
     function sendData() {
@@ -198,13 +197,11 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         secString  = "";
         out = "";
 
-        //console.log(searchInput);
-
         if (validation(searchInput)) {
             mainAndSplit();
             evaluation();
         } else {
-            console.log("Sie sind behindert.")
+            console.log("Sie sind behindert.");
         }
         var data = "{"
             + "\n" + out
@@ -216,8 +213,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 +"\n\"module\": \"curl command line\""
             +"\n}"
         +"\n}";
-
-        console.log(data);
 
         var jsonData = JSON.parse(data);
 
@@ -237,9 +232,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }).then(function successCallback(response) {
             createFilter(response);
             totalOrder.style.visibility="visible";
-            generateOutput(response);
+            $scope.initInput = response.data.result;
         }, function errorCallback(response) {
-            console.log("err")
+            console.log("err: " + response);
         });
     }
 }]);
@@ -247,7 +242,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 function generateOutput(response) {
     var elemAt = document.getElementById("search-results");
     elemAt.innerHTML = "";
-    console.log(response.data.result);
     for(var i = 0; i < response.data.result.length; i++){
         var result = response.data.result[i];
         var url = result.documentBadge.uri;
@@ -256,9 +250,7 @@ function generateOutput(response) {
         if(result.mediaType != "IMAGE" || typeof result.previewImage === 'undefined'){
             elemAt.innerHTML += "<div class=textresult>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
         } else {
-                elemAt.innerHTML += "<div class=imgresult>" + "<table> <tr><td>" + "<a href="+ url + ">"
-                    + title + "</a>" + "</td></tr>" +"<tr><td><img src=" + img + "alt="+ title
-                    + "style=\"width:304px;height:228px;\"></td></tr></table>";
+            elemAt.innerHTML += "<div class=imgresult>" + "<table> <tr><td>" + "<a href="+ url + ">" + title + "</a>" + "</td></tr>" +"<tr><td><img src=" + img + "alt="+ title + "style=\"width:304px;height:228px;\"></td></tr></table>";
         }
     }
 
@@ -336,14 +328,16 @@ function createFilter(response){
     function generateCategory(header, arr){
         var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
         var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
-        var input = "<input type=\"checkbox\" class=\"checkbox\">";
+        var input = "<input type=\"checkbox\" class=\"checkbox\"";
         var checkBox = "<table>";
         for(var i=0; i<arr.length; i++) {
-            //TODO: angular ng-model einfuegen
-            checkBox += "<tr><td>" + input + arr[i] + "</td></tr></input>";
+            checkBoxModel[arr[i]] = "";
+            var ng = "ng-model=\"checkBoxModel." + arr[i] + "\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
+            checkBox += "<tr><td>" + input + ng + arr[i] + "</td></tr></input>";
         }
         checkBox += "</table>";
         var output = elemAt.innerHTML + firstHTML + header + "</div>" + secondHTML + checkBox + "</form></div></div></div>";
+        console.log(checkBoxModel);
         return output;
     }
 }
