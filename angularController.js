@@ -248,7 +248,7 @@ function generateOutput(response) {
         var url = result.documentBadge.uri;
         var img = result.previewImage;
         var title = result.title;
-        if(result.mediaType != "IMAGE" || typeof result.previewImage === undefined){
+        if(result.mediaType != "IMAGE" || typeof result.previewImage === 'undefined'){
             elemAt.innerHTML += "<div class=textresult>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
         } else {
             elemAt.innerHTML += "<div class=imgresult>" + "<table> <tr><td>" + "<a href="+ url + ">" + title + "</a>" + "</td></tr>" +"<tr><td><img src=" + img + "alt="+ title + "style=\"width:304px;height:228px;\"></td></tr></table>";
