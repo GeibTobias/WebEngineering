@@ -341,11 +341,12 @@ function createFilter(response){
         var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
         var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
         var input = "<input type=\"checkbox\" class=\"checkbox\">";
-        var checkBox = "";
+        var checkBox = "<table>";
         for(var i=0; i<arr.length; i++) {
             //TODO: angular ng-model einfuegen
-            checkBox += input + arr[i] + "</input>";
+            checkBox += "<tr><td>" + input + arr[i] + "</td></tr></input>";
         }
+        checkBox += "</table>"
         var output = elemAt.innerHTML + firstHTML + header + "</div>" + secondHTML + checkBox + "</form></div></div></div>";
         console.log(output);
         return output;

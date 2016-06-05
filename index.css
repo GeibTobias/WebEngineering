@@ -175,3 +175,23 @@
     background-color: darkgray;
     text-align: left;
 }
+
+.checkbox:hover{
+    cursor: pointer;
+}
+
+.result{
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom-color: darkgray;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-color: darkgray;
+    border-top-style: solid;
+    border-top-width: 1px;
+    font-color: grey;
+    font-size: 1.5vw;
+    text-align: left;
+    padding-left: 0.8vw;
+}
