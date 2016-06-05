@@ -244,7 +244,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             config: config
         }).then(function successCallback(response) {
             createFilter(response);
-
+            generateOutput(response);
         }, function errorCallback(response) {
             console.log("err")
         });
@@ -253,6 +253,19 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         //$http.post('https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recommend', jsonData, config).then(successCallback, errorCallback);
     }
 }]);
+
+function generateOutput(response) {
+    var elemAt = document.getElementById("search-results");
+    elemAt.innerHTML = "<div class=result>";
+    for(var i = 0; i < response.data.result.length; i++){
+        elemAt.innerHTML += (response.data.result[i].title);
+    }
+    elemAt.innerHTML += "</div>";
+    
+
+
+
+}
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
