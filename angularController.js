@@ -8,6 +8,7 @@ if(checkCookie()){
     userID = Math.floor(Math.random()*100000000000);
     setCookie("UUID", userID.toString(), 10);
 }
+var totalOrder = document.getElementById("switch-order");
 var mainString = "";
 var secString = "";
 var out = "";
@@ -235,6 +236,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             config: config
         }).then(function successCallback(response) {
             createFilter(response);
+            totalOrder.style.visibility="visible";
             generateOutput(response);
         }, function errorCallback(response) {
             console.log("err")
@@ -316,7 +318,7 @@ function createFilter(response){
         elemAt.innerHTML = generateCategory("Language", language);
     }
     if(date.length > 1) {
-        elemAt.innerHTML = generateCategory("Date", date);
+        elemAt.innerHTML = generateCategory("Decade", date);
     }
     if(provider.length > 1) {
         elemAt.innerHTML = generateCategory("Provider", provider);
