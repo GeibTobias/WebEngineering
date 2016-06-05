@@ -303,7 +303,7 @@ function createFilter(response){
     var resp = response.data;
     var totalResults = resp.totalResults;
     for(var i=0; i<totalResults; i++) {
-        if(mediaType.indexOf(resp.result[i].mediaType) == -1) {
+        if(mediaType.indexOf(resp.result[i].mediaType) == -1 && "unknown".localeCompare(resp.result[i].mediaType)) {
             mediaType.push(resp.result[i].mediaType);
         }
         if(language.indexOf(resp.result[i].language) == -1 && "unknown".localeCompare(resp.result[i].language)) {
@@ -320,6 +320,7 @@ function createFilter(response){
             provider.push(resp.result[i].documentBadge.provider);
         }
     }
+    mediaType.sort(); language.sort(); date.sort().reverse(); provider.sort();
     var elemAt = document.getElementById("search-selector");
     elemAt.innerHTML = "";
     if(mediaType.length > 1) {
