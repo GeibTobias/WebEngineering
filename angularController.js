@@ -295,10 +295,10 @@ function createFilter(response){
         if(language.indexOf(resp.result[i].language) == -1 && "unknown".localeCompare(resp.result[i].language)) {
             language.push(resp.result[i].language);
         }
-        if("unknown".localeCompare(resp.results[i].date)) {
-            var decade = String(rest.results[i].date).substring(0, 2) + "0";
-            if(date.indexOf(resp.result[i].date) == -1) {
-                date.push(resp.result[i].date);
+        if("unknown".localeCompare(resp.result[i].date)) {
+            var decade = String(resp.result[i].date).replace(/\[/,"").substring(0, 3) + "0";
+            if(date.indexOf(decade) == -1) {
+                date.push(decade);
             }
         }
         if(provider.indexOf(resp.result[i].documentBadge.provider) == -1
@@ -306,21 +306,35 @@ function createFilter(response){
             provider.push(resp.result[i].documentBadge.provider);
         }
     }
-    var elemAt;
-    var firstHTML = ;
-    var secondHTm = ;
+    var elemAt = document.getElementById("search-selector");
+    elemAt.innerHTML = "";
+    var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
+    var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
+    var input = "<input type=\"checkbox\" class=\"checkbox\">";
     if(mediaType.length > 1) {
-        elemAt = document.getElementById("search-selector");
-        elemAt.innerHTML = elemAt.innerHTML + "<div class=\"category\"><div class=\"category-header\"><div class=\"category-content\">
-        <div class=\"checkbox-container\"><input type=\"checkbox\" class=\"checkbox\">Hai</input></div></div> </div>"
+        elemAt.innerHTML = generateCategory("Media", mediaType);
     }
     if(language.length > 1) {
-
+        elemAt.innerHTML = generateCategory("Language", language);
     }
     if(date.length > 1) {
-
+        elemAt.innerHTML = generateCategory("Date", date);
     }
     if(provider.length > 1) {
+        elemAt.innerHTML = generateCategory("Provider", provider);
+    }
 
+    function generateCategory(header, arr){
+        var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
+        var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
+        var input = "<input type=\"checkbox\" class=\"checkbox\">";
+        var checkBox = "";
+        for(var i=0; i<arr.length; i++) {
+            //TODO: angular ng-model einfuegen
+            checkBox += input + arr[i] + "</input>";
+        }
+        var output = elemAt.innerHTML + firstHTML + header + "</div>" + secondHTML + checkBox + "</form></div></div></div>";
+        console.log(output);
+        return output;
     }
 }

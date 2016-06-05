@@ -167,8 +167,11 @@
     border-style: solid;
     border-color: darkgray;
     border-width: 1px;
+    text-align: left;
+    font-size: 1vw;
 }
 
 .checkbox{
     background-color: darkgray;
+    text-align: left;
 }
