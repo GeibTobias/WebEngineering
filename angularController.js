@@ -1,7 +1,6 @@
 var numResults = 10;
 var searchInput = "";
 var userID;
-var checkBoxModel = Object();
 checkCookie();
 if(checkCookie()){
     userID = getCookie("UUID");
@@ -21,8 +20,9 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         sendData();
     };
 
-    $scope.checkBoxModel = checkBoxModel;
+    $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
+    $scope.checkBoxModel = {mediaType: "", language: "", date: "", provider: ""};
     $scope.doFilter = function(result){
 
     };
@@ -233,6 +233,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             createFilter(response);
             totalOrder.style.visibility="visible";
             $scope.initInput = response.data.result;
+            $scope.initCheckbox = createFilter(response);
         }, function errorCallback(response) {
             console.log("err: " + response);
         });
@@ -310,29 +311,33 @@ function createFilter(response){
         }
     }
     mediaType.sort(); language.sort(); date.sort().reverse(); provider.sort();
+
+    return [{header: "mediaType", data: mediaType}, {header: "language", data: language}, {header: "date", data: date}, {header: "provider", data: provider}];
+
+    /*
     var elemAt = document.getElementById("search-selector");
     elemAt.innerHTML = "";
     if(mediaType.length > 1) {
-        elemAt.innerHTML = generateCategory("Media", mediaType);
+        elemAt.innerHTML = generateCategory("Media", "mediaType", mediaType);
     }
     if(language.length > 1) {
-        elemAt.innerHTML = generateCategory("Language", language);
+        elemAt.innerHTML = generateCategory("Language", "language", language);
     }
     if(date.length > 1) {
-        elemAt.innerHTML = generateCategory("Decade", date);
+        elemAt.innerHTML = generateCategory("Decade", "date", date);
     }
     if(provider.length > 1) {
-        elemAt.innerHTML = generateCategory("Provider", provider);
+        elemAt.innerHTML = generateCategory("Provider", "provider", provider);
     }
 
-    function generateCategory(header, arr){
+    function generateCategory(header, filter, arr){
         var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
         var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
         var input = "<input type=\"checkbox\" class=\"checkbox\"";
         var checkBox = "<table>";
         for(var i=0; i<arr.length; i++) {
-            checkBoxModel[arr[i]] = "";
-            var ng = "ng-model=\"checkBoxModel." + arr[i] + "\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
+            //var ng = "ng-model=\"checkBoxModel." + String(filter) + "\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
+            var ng = "ng-model=\"print()\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
             checkBox += "<tr><td>" + input + ng + arr[i] + "</td></tr></input>";
         }
         checkBox += "</table>";
@@ -340,4 +345,5 @@ function createFilter(response){
         console.log(checkBoxModel);
         return output;
     }
+    */
 }

@@ -24,6 +24,24 @@
     <div id="search-collect" name="search-collect" alt="search-collect">
         <div id="search-selector" name="search-selector" alt="search-selector">
             <!-- Filter will be displayed in this container -->
+            <div class="category" ng-repeat="box in initCheckbox">
+                <div class="category-header">
+                    {{box.header}}
+                </div>
+                <div class="category-content">
+                    <div class="checkbox-container">
+                        <form>
+                            <table>
+                                <tr ng-repeat="value in box.data">
+                                    <td>
+                                        <input type="checkbox" class="checkbox" ng-model="checkBoxModel[box.header]"/>{{value}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="search-results-container" name="search-results-container" alt="search-results-container">
             <div id="switch-order" class="switch-field">
@@ -35,8 +53,8 @@
             <div id="search-results" name="search-results" alt="search-results">
                 <!-- Search-results are displayed in this container -->
 
-                <div class="textresult" ng-repeat="x in initInput | filter:checkBoxModel">
-                        <a href={{x.documentBadge.uri}} > {{x.title}}</a>
+                <div class="textresult" ng-repeat="x in initInput ">
+                        <a href={{x.documentBadge.uri}} > {{checkBoxModel}}</a>
                 </div>
             </div>
         </div>
