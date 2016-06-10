@@ -28,10 +28,21 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.onAlphaOrderClicked = function(ordered) {
         console.log("onAlphaOderClicked aufgerufen");
         if(Boolean(ordered)) {
-            $scope.initInput = $scope.oldOrder;
+            if($scope.oldOrder != null) {
+                console.log($scope.oldOrder == $scope.initInput);
+                $scope.initInput = $scope.oldOrder;
+            }
         } else {
-            $scope.oldOrder = $scope.initInput;
-            $scope.initInput = $filter('orderBy')($scope.initInput.result, 'title');
+            console.log($scope.initInput);
+            $scope.oldOrder = [];
+            for(i in $scope.initInput) {
+                $scope.oldOrder[i] = $scope.initInput[i];
+            }
+            $scope.initInput = $scope.initInput.sort(function (a,b) {
+                var textA = a.title.toUpperCase();
+                var textB = b.title.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
         }
     };
 
@@ -40,6 +51,13 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.unfilteredInput = [];
     $scope.checkBoxes = {};
 
+    $scope.doFilter = function(){
+        for(x in $scope.checkBoxes) {
+            for(y in x) {
+                console.log(y);
+                console.log(x);
+            }
+        }
     $scope.createFilter = function(box, value){
         if($scope.checkBoxes[box][value] != undefined && $scope.checkBoxes[box][value] == false) {
             var size = 0, key;
@@ -332,5 +350,7 @@ function createFilter(response){
     if(language.length > 1) {out.push({header: "language", title: "Language", data: language});}
     if(date.length > 1) {out.push({header: "date", title: "Decade", data: date});}
     if(provider.length > 1) {out.push({header: "provider", title: "Provider", data: provider});}
+
+
     return out;
 }
