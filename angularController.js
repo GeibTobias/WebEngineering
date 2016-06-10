@@ -71,16 +71,15 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             console.log("Aufruf:" + index);
             var check = true;
             for (var box in $scope.checkBoxes) {
-                console.log("Box: " + box.toString());
-                for (var searchValue in box) {
-                    console.log("searchValue: " + searchValue.toString());
-                    var search = getNestedValueOf(searchValue.toString, value);
-                    if (search == false || box[searchValue].localeCompare(search)) {
-                        check = false;
+                    for (var searchValue in $scope.checkBoxes[box]) {
+                        var search = getNestedValueOf(searchValue.toString(), value);
+                        if (search == false || $scope.checkBoxes[box][searchValue].toString().localeCompare(search)) {
+                            check = false;
+                        }
+                        console.log("foundValue: " + search);
                     }
-                    console.log("foundValue: " + box[searchValue]);
-                }
             }
+            //TODO: 
             if(check) { return true;}
         }
 
@@ -394,11 +393,12 @@ function createFilter(response){
 
 function getNestedValueOf(header, obj) {
     for(var key in obj) {
-        if(!String(header).localeCompare(key)) return obj[key];
+        console.log(key.toString());
+        if(!header.toString().localeCompare(obj[key].toString())) return obj[key];
     }
-    for(var key in obj) {
-        if(!"object".localeCompare(typeof obj[key])) {
-            var temp = getNestedValueOf(header, obj[key]);
+    for(var keyObj in obj) {
+        if(!"object".localeCompare(typeof obj[keyObj])) {
+            var temp = getNestedValueOf(header, obj[keyObj]);
             if(temp != false) {
                 return temp;
             }
