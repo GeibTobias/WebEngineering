@@ -1,5 +1,5 @@
 // TODO: zehn
-var numResults = 1000000;
+var numResults = 10;
 var searchInput = "";
 var userID;
 checkCookie();
@@ -52,7 +52,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.oldOrder = [];
     $scope.checkBoxes = {};
 
-
     $scope.createFilter = function(box, value){
         if($scope.checkBoxes[box][value] != undefined && $scope.checkBoxes[box][value] == false) {
             var size = 0, key;
@@ -66,10 +65,53 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
         console.log($scope.checkBoxes);
     };
-    
+
     $scope.filterOut = function() {
-        
+        return function(value, index, results) {
+            console.log("Aufruf:" + index);
+            var check = true;
+            for (var box in $scope.checkBoxes) {
+                console.log("Box: " + box.toString());
+                for (var searchValue in box) {
+                    console.log("searchValue: " + searchValue.toString());
+                    var search = getNestedValueOf(searchValue.toString, value);
+                    if (search == false || box[searchValue].localeCompare(search)) {
+                        check = false;
+                    }
+                    console.log("foundValue: " + box[searchValue]);
+                }
+            }
+            if(check) { return true;}
+        }
+
     };
+
+    /*
+    $scope.filterOut = function() {
+        return function(value, index, results) {
+            var filtered = [];
+            console.log(results.length);
+            for(var i=0; i<results.length; i++) {
+                var res = results[i];
+                var check = true;
+                console.log($scope.checkBoxes);
+
+                for(var box in $scope.checkBoxes) {
+                    for(var value in box) {
+                        var search = getNestedValueOf(value.toString, res);
+                        if(search == false || box[value].localeCompare(search)){
+                            check = false;
+                        }
+
+                    }
+                }
+
+                if(check) filtered.push(res);
+            }
+
+        }
+    };
+    */
 
     function validation(input) {
         // valid if: op == cl
@@ -352,10 +394,10 @@ function createFilter(response){
 
 function getNestedValueOf(header, obj) {
     for(var key in obj) {
-        if(obj[key] == header) return obj[key];
+        if(!String(header).localeCompare(key)) return obj[key];
     }
     for(var key in obj) {
-        if(typeof obj[key] == "object") {
+        if(!"object".localeCompare(typeof obj[key])) {
             var temp = getNestedValueOf(header, obj[key]);
             if(temp != false) {
                 return temp;
