@@ -26,7 +26,7 @@
             <!-- Filter will be displayed in this container -->
             <div class="category" ng-repeat="box in initCheckbox">
                 <div class="category-header">
-                    {{box.header}}
+                    {{box.title}}
                 </div>
                 <div class="category-content">
                     <div class="checkbox-container">
@@ -34,7 +34,10 @@
                             <table>
                                 <tr ng-repeat="value in box.data">
                                     <td>
-                                        <input type="checkbox" class="checkbox" ng-model="checkBoxModel[box.header]"/>{{value}}
+                                        <input type="checkbox" class="checkbox" ng-model="checkBoxModel[box.header]" ng-change="doFilter()"/>
+                                    </td>
+                                    <td>
+                                        {{value}}
                                     </td>
                                 </tr>
                             </table>
@@ -45,16 +48,27 @@
         </div>
         <div id="search-results-container" name="search-results-container" alt="search-results-container">
             <div id="switch-order" class="switch-field">
-                <input type="radio" id="switch_left" name="switch_2" value="yes" checked/>
+                <input type="radio" id="switch_left" name="switch_2" value="yes" ng-model="string" ng-change="onAlphaOrderClicked(true)" checked/>
                 <label for="switch_left">Original Order</label>
-                <input type="radio" id="switch_right" name="switch_2" value="no" />
+                <input type="radio" id="switch_right" name="switch_2" value="no" ng-model="string" ng-change="onAlphaOrderClicked(false)"/>
                 <label for="switch_right">Alphabetic Order</label>
             </div>
             <div id="search-results" name="search-results" alt="search-results">
                 <!-- Search-results are displayed in this container -->
 
-                <div class="textresult" ng-repeat="x in initInput ">
-                        <a href={{x.documentBadge.uri}} > {{checkBoxModel}}</a>
+                <div class="textresult" ng-repeat="x in initInput">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href={{x.documentBadge.uri}} > {{x.title}}</a>
+                            </td>
+                        </tr>
+                        <tr ng-if="x.previewImage">
+                            <td>
+                                <img src="{{x.previewImage}}" style="width:17vw;height: 24vw;">
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

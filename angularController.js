@@ -1,4 +1,5 @@
-var numResults = 10;
+// TODO: zehn
+var numResults = 1000000;
 var searchInput = "";
 var userID;
 checkCookie();
@@ -14,18 +15,47 @@ var secString = "";
 var out = "";
 var mediaType = [], language = [], date = [], provider = [];
 
-app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
+app.controller("angCtrl", ['$scope','$http', function($scope, $http, $filter) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
+    };
+    
+    //$filter('filter')($scope.initInput, 'documentBadge.provider');
+    
+
+    $scope.oldInitInput;
+    $scope.onAlphaOrderClicked = function(ordered) {
+        console.log("onAlphaOderClicked aufgerufen");
+        if(Boolean(ordered)) {
+            $scope.initInput = $scope.oldOrder;
+        } else {
+            $scope.oldOrder = $scope.initInput;
+            $scope.initInput = $filter('orderBy')($scope.initInput.result, 'title');
+        }
     };
 
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
     $scope.checkBoxModel = {mediaType: "", language: "", date: "", provider: ""};
-    $scope.doFilter = function(result){
-
+    /*
+    $scope.doFilter = function(value, index, array){
+        var out = [];
+        for(let a in checkBoxModel){
+            if(!checkBoxModel.hasOwnProperty(a)){continue;}
+            switch(a.toString()){
+                case "mediaType":
+                    console.log("print: " a.toString());
+                    if(value[a].localeCompare(checkBoxModel[a])){}
+                    break;
+            }
+            if("".localeCompare(checkBoxModel.a) && angular.compare(value.a, checkBoxModel.a)) {
+                out.push(value);
+            }
+        }
+        return out;
     };
+    */
 
     function validation(input) {
         // valid if: op == cl
@@ -312,7 +342,12 @@ function createFilter(response){
     }
     mediaType.sort(); language.sort(); date.sort().reverse(); provider.sort();
 
-    return [{header: "mediaType", data: mediaType}, {header: "language", data: language}, {header: "date", data: date}, {header: "provider", data: provider}];
+    var out = [];
+    if(mediaType.length > 1) {out.push({header: "mediaType", title: "Media", data: mediaType});}
+    if(language.length > 1) {out.push({header: "language", title: "Language", data: language});}
+    if(date.length > 1) {out.push({header: "date", title: "Decade", data: date});}
+    if(provider.length > 1) {out.push({header: "provider", title: "Provider", data: provider});}
+    return out;
 
     /*
     var elemAt = document.getElementById("search-selector");

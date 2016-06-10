@@ -18,15 +18,16 @@
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: 9em;
+    background-origin: padding-box;
     background-position: right center;
-    padding-left: 15px;
+    padding-left: 0.6em;
     font-size: 1em;
 }
 
 #inner-container{
-    margin-right: 15px;
-    margin-left: 15px;
-    margin-top: 10px;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    margin-top: 1em;
 }
 
 #input-container{
@@ -124,7 +125,7 @@
 .category{
     width: 100%;
     background-color: transparent;
-    padding-left: 5px;
+    padding-left: 0.25em;
     margin-bottom: 20px;
     min-height: 45px;
 }
@@ -158,13 +159,13 @@
     border-radius: 10px;
     background: transparent;
     position: relative;
-    padding-top: 30px;
+    padding-top: 2vw;
 }
 
 .checkbox-container{
-    margin-left: 10%;
-    margin-right: 10%;
-    padding-left: 3px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    padding-left: 0.3em;
     border-style: solid;
     border-color: darkgray;
     border-width: 1px;
@@ -176,6 +177,9 @@
     background-color: darkgray;
     text-overflow: ellipsis;
     text-align: left;
+    width: 0.5em;
+    height: 0.5em;
+
 }
 
 .checkbox:hover{
