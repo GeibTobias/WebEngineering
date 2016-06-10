@@ -37,10 +37,25 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
-    $scope.checkBoxes = [];
+    $scope.unfilteredInput = [];
+    $scope.checkBoxes = {};
 
-    $scope.doFilter = function(){
-        console.log($scope.checkBoxes.toString());
+    $scope.createFilter = function(box, value){
+        if($scope.checkBoxes[box][value] != undefined && $scope.checkBoxes[box][value] == false) {
+            var size = 0, key;
+            for(key in $scope.checkBoxes[box]) {
+                if ($scope.checkBoxes[box].hasOwnProperty(key)) size++;
+            }
+            delete $scope.checkBoxes[box][value];
+            if(size == 1) {
+                delete $scope.checkBoxes[box];
+            }
+        }
+        console.log($scope.checkBoxes);
+    };
+    
+    $scope.filterOut = function() {
+        
     };
 
     function validation(input) {
@@ -249,6 +264,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             createFilter(response);
             totalOrder.style.visibility="visible";
             $scope.initInput = response.data.result;
+            $scope.unfilteredInput = response.data.result;
             $scope.initCheckbox = createFilter(response);
         }, function errorCallback(response) {
             console.log("err: " + response);

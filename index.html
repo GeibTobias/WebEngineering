@@ -17,7 +17,7 @@
     <div id="search" name="search" alt="search">
         <div id="input-container" name="input-container" alt="input-container">
             <form ng-submit="putin()" id="search-form">
-                <input id="search-input" type="text" placeholder="Search" autofocus/>
+                <input id="search-input" type="text" placeholder="Search"  autofocus/>
             </form>
         </div>
     </div>
@@ -32,9 +32,9 @@
                     <div class="checkbox-container">
                         <form>
                             <table>
-                                <tr ng-repeat="value in box.data track by $index">
+                                <tr ng-repeat="value in box.data">
                                     <td>
-                                        <input type="checkbox" class="checkbox" ng-model="checkBoxes[$index]" ng-checked="{{value}}" ng-change="doFilter()"/>
+                                        <input type="checkbox" class="checkbox" ng-model="checkBoxes[box.header][value]" ng-change="createFilter(box.header, value)"/>
                                     </td>
                                     <td>
                                         {{value}}
@@ -56,7 +56,7 @@
             <div id="search-results" name="search-results" alt="search-results">
                 <!-- Search-results are displayed in this container -->
 
-                <div class="textresult" ng-repeat="x in initInput">
+                <div class="textresult" ng-repeat="x in initInput | filter:checkBoxes">
                     <table>
                         <tr>
                             <td>
