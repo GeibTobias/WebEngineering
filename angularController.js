@@ -28,19 +28,35 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.onAlphaOrderClicked = function(ordered) {
         console.log("onAlphaOderClicked aufgerufen");
         if(Boolean(ordered)) {
-            $scope.initInput = $scope.oldOrder;
+            if($scope.oldOrder != null) {
+                console.log($scope.oldOrder == $scope.initInput);
+                $scope.initInput = $scope.oldOrder;
+            }
         } else {
-            $scope.oldOrder = $scope.initInput;
-            $scope.initInput = $filter('orderBy')($scope.initInput.result, 'title');
+            console.log($scope.initInput);
+            $scope.oldOrder = [];
+            for(i in $scope.initInput) {
+                $scope.oldOrder[i] = $scope.initInput[i];
+            }
+            $scope.initInput = $scope.initInput.sort(function (a,b) {
+                var textA = a.title.toUpperCase();
+                var textB = b.title.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
         }
     };
 
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
-    $scope.checkBoxes = [];
+    $scope.checkBoxes = [{mediaType: [], language: [], date: [], provider: []}];
 
     $scope.doFilter = function(){
-        console.log($scope.checkBoxes.toString());
+        for(x in $scope.checkBoxes) {
+            for(y in x) {
+                console.log(y);
+                console.log(x);
+            }
+        }
     };
 
     function validation(input) {
@@ -316,5 +332,7 @@ function createFilter(response){
     if(language.length > 1) {out.push({header: "language", title: "Language", data: language});}
     if(date.length > 1) {out.push({header: "date", title: "Decade", data: date});}
     if(provider.length > 1) {out.push({header: "provider", title: "Provider", data: provider});}
+
+
     return out;
 }

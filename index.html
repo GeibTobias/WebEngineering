@@ -34,7 +34,7 @@
                             <table>
                                 <tr ng-repeat="value in box.data track by $index">
                                     <td>
-                                        <input type="checkbox" class="checkbox" ng-model="checkBoxes[$index]" ng-checked="{{value}}" ng-change="doFilter()"/>
+                                        <input type="checkbox" class="checkbox" ng-model="checkBoxes[box.header][$index]" ng-checked="{{value}}" ng-change="doFilter()"/>
                                     </td>
                                     <td>
                                         {{value}}
