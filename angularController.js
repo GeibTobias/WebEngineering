@@ -26,14 +26,14 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 
     $scope.oldInitInput;
     $scope.onAlphaOrderClicked = function(ordered) {
-        console.log("onAlphaOderClicked aufgerufen");
+        //console.log("onAlphaOderClicked aufgerufen");
         if(Boolean(ordered)) {
             if($scope.oldOrder != null) {
-                console.log($scope.oldOrder == $scope.initInput);
+                //console.log($scope.oldOrder == $scope.initInput);
                 $scope.initInput = $scope.oldOrder;
             }
         } else {
-            console.log($scope.initInput);
+            //console.log($scope.initInput);
             $scope.oldOrder = [];
             for(i in $scope.initInput) {
                 $scope.oldOrder[i] = $scope.initInput[i];
@@ -49,15 +49,10 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
     $scope.unfilteredInput = [];
+    $scope.oldOrder = [];
     $scope.checkBoxes = {};
 
-    $scope.doFilter = function(){
-        for(x in $scope.checkBoxes) {
-            for(y in x) {
-                console.log(y);
-                console.log(x);
-            }
-        }
+
     $scope.createFilter = function(box, value){
         if($scope.checkBoxes[box][value] != undefined && $scope.checkBoxes[box][value] == false) {
             var size = 0, key;
@@ -353,4 +348,19 @@ function createFilter(response){
 
 
     return out;
+}
+
+function getNestedValueOf(header, obj) {
+    for(var key in obj) {
+        if(obj[key] == header) return obj[key];
+    }
+    for(var key in obj) {
+        if(typeof obj[key] == "object") {
+            var temp = getNestedValueOf(header, obj[key]);
+            if(temp != false) {
+                return temp;
+            }
+        }
+    }
+    return false;
 }
