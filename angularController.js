@@ -15,7 +15,7 @@ var secString = "";
 var out = "";
 var mediaType = [], language = [], date = [], provider = [];
 
-app.controller("angCtrl", ['$scope','$http', function($scope, $http, $filter) {
+app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
@@ -37,25 +37,11 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http, $filter) {
 
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
-    $scope.checkBoxModel = {mediaType: "", language: "", date: "", provider: ""};
-    /*
-    $scope.doFilter = function(value, index, array){
-        var out = [];
-        for(let a in checkBoxModel){
-            if(!checkBoxModel.hasOwnProperty(a)){continue;}
-            switch(a.toString()){
-                case "mediaType":
-                    console.log("print: " a.toString());
-                    if(value[a].localeCompare(checkBoxModel[a])){}
-                    break;
-            }
-            if("".localeCompare(checkBoxModel.a) && angular.compare(value.a, checkBoxModel.a)) {
-                out.push(value);
-            }
-        }
-        return out;
+    $scope.checkBoxes = [];
+
+    $scope.doFilter = function(){
+        console.log($scope.checkBoxes.toString());
     };
-    */
 
     function validation(input) {
         // valid if: op == cl
@@ -270,23 +256,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http, $filter) {
     }
 }]);
 
-function generateOutput(response) {
-    var elemAt = document.getElementById("search-results");
-    elemAt.innerHTML = "";
-    for(var i = 0; i < response.data.result.length; i++){
-        var result = response.data.result[i];
-        var url = result.documentBadge.uri;
-        var img = result.previewImage;
-        var title = result.title;
-        if(result.mediaType != "IMAGE" || typeof result.previewImage === 'undefined'){
-            elemAt.innerHTML += "<div class=textresult>" + "<a href="+ url + ">" + title + "</a>"  + "</div>";
-        } else {
-            elemAt.innerHTML += "<div class=imgresult>" + "<table> <tr><td>" + "<a href="+ url + ">" + title + "</a>" + "</td></tr>" +"<tr><td><img src=" + img + "alt="+ title + "style=\"width:304px;height:228px;\"></td></tr></table>";
-        }
-    }
-
-}
-
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -348,37 +317,4 @@ function createFilter(response){
     if(date.length > 1) {out.push({header: "date", title: "Decade", data: date});}
     if(provider.length > 1) {out.push({header: "provider", title: "Provider", data: provider});}
     return out;
-
-    /*
-    var elemAt = document.getElementById("search-selector");
-    elemAt.innerHTML = "";
-    if(mediaType.length > 1) {
-        elemAt.innerHTML = generateCategory("Media", "mediaType", mediaType);
-    }
-    if(language.length > 1) {
-        elemAt.innerHTML = generateCategory("Language", "language", language);
-    }
-    if(date.length > 1) {
-        elemAt.innerHTML = generateCategory("Decade", "date", date);
-    }
-    if(provider.length > 1) {
-        elemAt.innerHTML = generateCategory("Provider", "provider", provider);
-    }
-
-    function generateCategory(header, filter, arr){
-        var firstHTML = "<div class=\"category\"><div class=\"category-header\">";
-        var secondHTML = "<div class=\"category-content\"><div class=\"checkbox-container\"><form>";
-        var input = "<input type=\"checkbox\" class=\"checkbox\"";
-        var checkBox = "<table>";
-        for(var i=0; i<arr.length; i++) {
-            //var ng = "ng-model=\"checkBoxModel." + String(filter) + "\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
-            var ng = "ng-model=\"print()\" ng-true-value=\"" + arr[i] + "\" ng-false-value=''>";
-            checkBox += "<tr><td>" + input + ng + arr[i] + "</td></tr></input>";
-        }
-        checkBox += "</table>";
-        var output = elemAt.innerHTML + firstHTML + header + "</div>" + secondHTML + checkBox + "</form></div></div></div>";
-        console.log(checkBoxModel);
-        return output;
-    }
-    */
 }
