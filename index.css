@@ -7,7 +7,6 @@
 }
 
 #title{
-    margin: 0px;
     border-bottom-color: darkgray;
     border-bottom-style: solid;
     border-bottom-width: 2px;
@@ -20,6 +19,7 @@
     background-size: 9em;
     background-origin: padding-box;
     background-position: right center;
+    padding-top: -2vw;
     padding-left: 0.6em;
     font-size: 1em;
 }
@@ -27,7 +27,7 @@
 #inner-container{
     margin-right: 0.5em;
     margin-left: 0.5em;
-    margin-top: 1em;
+    margin-top: 0.3vw;
 }
 
 #input-container{
@@ -233,4 +233,10 @@ a:link{
 a:hover{
     cursor: pointer;
     text-shadow: 1px 1px darkgrey;
+}
+
+#UUID{
+    padding-left: 0.2vw;
+    font-size: 0.6vw;
+    margin: 0px;
 }

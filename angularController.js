@@ -1,21 +1,12 @@
-// TODO: zehn
 var numResults = 10;
 var searchInput = "";
-var userID;
-checkCookie();
-if(checkCookie()){
-    userID = getCookie("UUID");
-} else {
-    userID = Math.floor(Math.random()*100000000000);
-    setCookie("UUID", userID.toString(), 10);
-}
 var totalOrder = document.getElementById("switch-order");
 var mainString = "";
 var secString = "";
 var out = "";
 var mediaType = [], language = [], date = [], provider = [];
 
-app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) {
+app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
@@ -89,7 +80,6 @@ app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) 
             }
             if(check) {outArr.push(value);}
         }
-        console.log(outArr);
         return outArr;
     };
 
@@ -150,14 +140,6 @@ app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) 
                 }
             }
         }
-        /*
-        console.log("Number Brackets: " + String(op == cl));
-        console.log("Number non-bracket parts:" + String(countNBracketAND < 2));
-        console.log("One non-bracket-part is AND:" + exactOneNBrachetAND);
-        console.log("Correct order of arguments:" + !twoFollowing);
-        console.log("Correct number of arguments and operators:" + String(countOp == countNOp - 1));
-        console.log("###########################################");
-        */
         return (op == cl && countNBracketAND < 2 && exactOneNBrachetAND && !twoFollowing && countOp == countNOp - 1);
     }
 
@@ -269,13 +251,14 @@ app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) 
         } else {
             // TODO
         }
+        var id = document.getElementById("UUID").innerHTML;
         var data = "{"
             + "\n" + out
             + "\n\"numResults\":" + numResults + ","
             + "\n\"origin\": {"
                 +"\n\"clientType\": \"EEXCESS Advanced Search UNI PASSAU\","
                 +"\n\"clientVersion\": \"1000.0\","
-                +"\n\"userID\":" + String(userID) + ","
+                +"\n\"userID\":" + id.toString() + ","
                 +"\n\"module\": \"curl command line\""
             +"\n}"
         +"\n}";
@@ -305,37 +288,6 @@ app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) 
         });
     }
 }]);
-
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length,c.length);
-        }
-    }
-    return "";
-}
-
-function checkCookie() {
-    var user = getCookie("UUID");
-    if (user != "") {
-        console.log("Welcome again " + user);
-        return true;
-    }
-    return false;
-}
 
 function createFilter(response){
     mediaType = []; language = []; date = []; provider = [];

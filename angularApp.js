@@ -1,2 +1,2 @@
 
-var app = angular.module("EEXCESSSearch", []);
+var app = angular.module("EEXCESSSearch", ['ngCookies']);

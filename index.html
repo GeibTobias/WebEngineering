@@ -3,17 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <link rel="stylesheet" href="index.css">
     <title>EEXCESS Advanced Search</title>
 </head>
 
 <script type="text/javascript"></script>
 
-<body class="body">
-<div id="title" name="title" alt="search">
-    <p>EEXCESS Advanced Search</p>
+<body ng-app="EEXCESSSearch" class="body">
+<div ng-controller="cookieHandler" id="title" name="title" alt="search">
+    <table>
+        <tr style="padding-bottom: 0em">
+            <td>
+                <p>EEXCESS Advanced Search</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="UUID">{{UUID}}</p>
+            </td>
+        </tr>
+    </table>
 </div>
-<div ng-app="EEXCESSSearch" ng-controller="angCtrl" id="inner-container" name="inner-container" alt="inner-container">
+<div ng-controller="angCtrl" id="inner-container" name="inner-container" alt="inner-container">
     <div id="search" name="search" alt="search">
         <div id="input-container" name="input-container" alt="input-container">
             <form ng-submit="putin()" id="search-form">
@@ -77,6 +89,7 @@
 
 <script src="angularApp.js"></script>
 <script src="angularController.js"></script>
+<script src="angularCookies.js"></script>
 
 </body>
 </html>
