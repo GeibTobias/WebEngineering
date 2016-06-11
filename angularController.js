@@ -15,25 +15,20 @@ var secString = "";
 var out = "";
 var mediaType = [], language = [], date = [], provider = [];
 
-app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
+app.controller("angCtrl", ['$scope','$http', '$filter', function($scope, $http) {
     $scope.putin = function() {
         searchInput = document.getElementById("search-input").value;
         sendData();
     };
-    
-    //$filter('filter')($scope.initInput, 'documentBadge.provider');
-    
 
     $scope.oldInitInput;
+    $scope.oldOrder = [];
     $scope.onAlphaOrderClicked = function(ordered) {
-        //console.log("onAlphaOderClicked aufgerufen");
         if(Boolean(ordered)) {
             if($scope.oldOrder != null) {
-                //console.log($scope.oldOrder == $scope.initInput);
                 $scope.initInput = $scope.oldOrder;
             }
         } else {
-            //console.log($scope.initInput);
             $scope.oldOrder = [];
             for(i in $scope.initInput) {
                 $scope.oldOrder[i] = $scope.initInput[i];
@@ -48,8 +43,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
 
     $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
-    $scope.unfilteredInput = [];
-    $scope.oldOrder = [];
     $scope.checkBoxes = {};
 
     $scope.createFilter = function(box, value){
@@ -63,54 +56,42 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 delete $scope.checkBoxes[box];
             }
         }
-        console.log($scope.checkBoxes);
     };
 
-    $scope.filterOut = function() {
-        return function(value, index, results) {
-            console.log("Aufruf:" + index);
-            var check = true;
+    $scope.filteredArray = function() {
+        if(isEmpty($scope.checkBoxes)) {return $scope.initInput;}
+        var outArr = [];
+        var check = false;
+        var oneOfEm = false;
+        for(var i=0; i<$scope.initInput.length; i++) {
+            var value = $scope.initInput[i];
+            if(value == undefined || $scope.initInput.length < 1) {return [];}
+            check = true;
             for (var box in $scope.checkBoxes) {
-                    for (var searchValue in $scope.checkBoxes[box]) {
-                        var search = getNestedValueOf(searchValue.toString(), value);
-                        if (search == false || $scope.checkBoxes[box][searchValue].toString().localeCompare(search)) {
-                            check = false;
+                oneOfEm = false;
+                for (var searchValue in $scope.checkBoxes[box]) {
+                    var search = false;
+                    if(!box.toString().localeCompare("date")) {
+                        search = getNestedDateOf(searchValue.toString().substring(0, 3), value);
+                        if(search != false) {
+                            search = search.toString().substring(0,4);
                         }
-                        console.log("foundValue: " + search);
+                    } else {
+                        search = getNestedValueOf(searchValue.toString(), value);
                     }
-            }
-            //TODO: 
-            if(check) { return true;}
-        }
-
-    };
-
-    /*
-    $scope.filterOut = function() {
-        return function(value, index, results) {
-            var filtered = [];
-            console.log(results.length);
-            for(var i=0; i<results.length; i++) {
-                var res = results[i];
-                var check = true;
-                console.log($scope.checkBoxes);
-
-                for(var box in $scope.checkBoxes) {
-                    for(var value in box) {
-                        var search = getNestedValueOf(value.toString, res);
-                        if(search == false || box[value].localeCompare(search)){
-                            check = false;
-                        }
-
+                    if(search == false || searchValue.toString().localeCompare(search)) {
+                        check = false;
+                    } else {
+                        oneOfEm = true;
                     }
                 }
-
-                if(check) filtered.push(res);
+                if(oneOfEm) { check = true;}
             }
-
+            if(check) {outArr.push(value);}
         }
+        console.log(outArr);
+        return outArr;
     };
-    */
 
     function validation(input) {
         // valid if: op == cl
@@ -286,7 +267,7 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             mainAndSplit();
             evaluation();
         } else {
-            console.log("Sie sind behindert.");
+            // TODO
         }
         var data = "{"
             + "\n" + out
@@ -318,7 +299,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
             createFilter(response);
             totalOrder.style.visibility="visible";
             $scope.initInput = response.data.result;
-            $scope.unfilteredInput = response.data.result;
             $scope.initCheckbox = createFilter(response);
         }, function errorCallback(response) {
             console.log("err: " + response);
@@ -393,7 +373,6 @@ function createFilter(response){
 
 function getNestedValueOf(header, obj) {
     for(var key in obj) {
-        console.log(key.toString());
         if(!header.toString().localeCompare(obj[key].toString())) return obj[key];
     }
     for(var keyObj in obj) {
@@ -405,4 +384,39 @@ function getNestedValueOf(header, obj) {
         }
     }
     return false;
+}
+
+function getNestedDateOf(header, obj) {
+    for(var key in obj) {
+        if(!header.toString().localeCompare(obj[key].toString().substring(0, 3))) return obj[key].substring(0, 3) + "0";
+    }
+    for(var keyObj in obj) {
+        if(!"object".localeCompare(typeof obj[keyObj])) {
+            var temp = getNestedDateOf(header, obj[keyObj]);
+            if(temp != false) {
+                return temp;
+            }
+        }
+    }
+    return false;
+}
+
+function isEmpty(obj) {
+
+    // null and undefined are "empty"
+    if (obj == null) return true;
+
+    // Assume if it has a length property with a non-zero value
+    // that that property is correct.
+    if (obj.length > 0)    return false;
+    if (obj.length === 0)  return true;
+
+    // Otherwise, does it have any properties of its own?
+    // Note that this doesn't handle
+    // toString and valueOf enumeration bugs in IE < 9
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) return false;
+    }
+
+    return true;
 }
