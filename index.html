@@ -10,10 +10,10 @@
 
 <script type="text/javascript"></script>
 
-<body ng-app="EEXCESSSearch" class="body">
-<div ng-controller="cookieHandler" id="title" name="title" alt="search">
+<body ng-app="EEXCESSSearch" ng-controller="angCtrl" class="body">
+<div id="title" name="title" alt="search">
     <table>
-        <tr style="padding-bottom: 0em">
+        <tr>
             <td>
                 <p>EEXCESS Advanced Search</p>
             </td>
@@ -25,13 +25,21 @@
         </tr>
     </table>
 </div>
-<div ng-controller="angCtrl" id="inner-container" name="inner-container" alt="inner-container">
+<div id="inner-container" name="inner-container" alt="inner-container">
     <div id="search" name="search" alt="search">
-        <div id="input-container" name="input-container" alt="input-container">
-            <form ng-submit="putin()" id="search-form">
-                <input id="search-input" type="text" placeholder="Search"  autofocus/>
-            </form>
-        </div>
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td style="width: 70%">
+                    <div id="input-container" name="input-container" alt="input-container">
+                        <form ng-submit="putin()" id="search-form">
+                            <input id="search-input" ng-model="searchInput" type="text" placeholder="Search"  autofocus/>
+                        </form>
+                    </div>
+                </td>
+                <td style="padding-left: 1vw;">
+                    <select ng-model="numResults" ng-change="putin()" ng-options="option for option in dropdown"></select>
+                </td>
+        </table>
     </div>
     <div id="search-collect" name="search-collect" alt="search-collect">
         <div id="search-selector" name="search-selector" alt="search-selector">
@@ -89,7 +97,6 @@
 
 <script src="angularApp.js"></script>
 <script src="angularController.js"></script>
-<script src="angularCookies.js"></script>
 
 </body>
 </html>

@@ -1,18 +1,25 @@
-var numResults = 10;
-var searchInput = "";
 var totalOrder = document.getElementById("switch-order");
 var mainString = "";
 var secString = "";
 var out = "";
 var mediaType = [], language = [], date = [], provider = [];
 
-app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
+app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cookies, $http) {
+    $scope.UUID = $cookies.get('UUID');
+    if($scope.UUID == undefined || !$scope.UUID.localeCompare('')) {
+        var id = Math.floor(Math.random()*100000000000).toString();
+        $cookies.put('UUID', id);
+        $scope.UUID = id;
+    }
+
+    $scope.searchInput = "";
     $scope.putin = function() {
-        searchInput = document.getElementById("search-input").value;
         sendData();
     };
+    
+    $scope.dropdown = [10, 50, 100, 500];
+    $scope.numResults = 10;
 
-    $scope.oldInitInput;
     $scope.oldOrder = [];
     $scope.onAlphaOrderClicked = function(ordered) {
         if(Boolean(ordered)) {
@@ -32,7 +39,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
     };
 
-    $scope.print = function(){ console.log("update")};
     $scope.initInput = [];
     $scope.checkBoxes = {};
 
@@ -100,6 +106,8 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 countNBracketAND ++;
             }
         }
+
+        if(op == 0 && cl == 0) {return true;}
 
         // valid if exactOneNBracketAND
         var exactOneNBrachetAND = true;
@@ -207,8 +215,8 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         var bracketCounter = 0;
         var bracketExist = false;
 
-        for(var i=0 ; i < searchInput.length; i++ ) {
-            charInput = String(searchInput).charAt(i);
+        for(var i=0 ; i < $scope.searchInput.length; i++ ) {
+            charInput = String($scope.searchInput).charAt(i);
 
 
                 if(charInput == '(') {
@@ -224,8 +232,8 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         }
 
         var secBool =  false;
-        for(var j = 0; j < searchInput.length; j++) {
-            charInput = String(searchInput).charAt(j);
+        for(var j = 0; j < $scope.searchInput.length; j++) {
+            charInput = String($scope.searchInput).charAt(j);
 
             if(j <= i) {
                 mainString += charInput;
@@ -245,20 +253,19 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
         secString  = "";
         out = "";
 
-        if (validation(searchInput)) {
+        if (validation($scope.searchInput)) {
             mainAndSplit();
             evaluation();
         } else {
             // TODO
         }
-        var id = document.getElementById("UUID").innerHTML;
         var data = "{"
             + "\n" + out
-            + "\n\"numResults\":" + numResults + ","
+            + "\n\"numResults\":" + $scope.numResults + ","
             + "\n\"origin\": {"
                 +"\n\"clientType\": \"EEXCESS Advanced Search UNI PASSAU\","
                 +"\n\"clientVersion\": \"1000.0\","
-                +"\n\"userID\":" + id.toString() + ","
+                +"\n\"userID\":" + $scope.UUID.toString() + ","
                 +"\n\"module\": \"curl command line\""
             +"\n}"
         +"\n}";
@@ -271,7 +278,6 @@ app.controller("angCtrl", ['$scope','$http', function($scope, $http) {
                 'Accept': 'application/json'
             }
         };
-
 
         $http({
             method: 'POST',
