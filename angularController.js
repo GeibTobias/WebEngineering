@@ -14,12 +14,26 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
 
     $scope.searchInput = "";
     $scope.putin = function() {
-        sendData();
+        if (validation($scope.searchInput)) {
+            mainAndSplit();
+            evaluation();
+            sendData();
+        } else {
+            document.getElementById("search-input").style.borderColor = "red";
+            setTimeout(function(){ document.getElementById("search-input").style.borderColor = "darkgrey"; }, 250);
+        }
+
+    };
+
+    $scope.showOrder = function() {
+        //return ($scope.initInput.length > 0 || $scope.oldOrder.length > 0);
+        return ($scope.initInput.length > 0);
     };
     
     $scope.dropdown = [10, 50, 100, 500];
     $scope.numResults = 10;
 
+    $scope.orderChecked = true;
     $scope.oldOrder = [];
     $scope.onAlphaOrderClicked = function(ordered) {
         if(Boolean(ordered)) {
@@ -39,6 +53,18 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
         }
     };
 
+    $scope.orderedInput = function(input) {
+        var out = [];
+        for(i in input) {
+            out[i] = input[i];
+        }
+        return out.sort(function (a,b) {
+            var textA = a.title.toUpperCase();
+            var textB = b.title.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+    };
+
     $scope.initInput = [];
     $scope.checkBoxes = {};
 
@@ -56,13 +82,14 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
     };
 
     $scope.filteredArray = function() {
-        if(isEmpty($scope.checkBoxes)) {return $scope.initInput;}
+        var inArr = $scope.initInput;
+        if(isEmpty($scope.checkBoxes)) {return (!$scope.orderChecked) ? $scope.orderedInput($scope.initInput) : $scope.initInput;}
         var outArr = [];
         var check = false;
         var oneOfEm = false;
-        for(var i=0; i<$scope.initInput.length; i++) {
-            var value = $scope.initInput[i];
-            if(value == undefined || $scope.initInput.length < 1) {return [];}
+        for(var i=0; i<inArr.length; i++) {
+            var value = inArr[i];
+            if(value == undefined || inArr.length < 1) {return [];}
             check = true;
             for (var box in $scope.checkBoxes) {
                 oneOfEm = false;
@@ -86,10 +113,15 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
             }
             if(check) {outArr.push(value);}
         }
+        if(!$scope.orderChecked) {
+            outArr = $scope.orderedInput(outArr);
+        }
         return outArr;
     };
 
     function validation(input) {
+        // not valid if empty
+        if(input.length < 1){ return false;}
         // valid if: op == cl
         var op=0, cl=0;
         var charAt;
@@ -107,6 +139,7 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
             }
         }
 
+        // instant valid if no Brackets
         if(op == 0 && cl == 0) {return true;}
 
         // valid if exactOneNBracketAND
@@ -253,12 +286,6 @@ app.controller("angCtrl", ['$scope', '$cookies', '$http', function($scope, $cook
         secString  = "";
         out = "";
 
-        if (validation($scope.searchInput)) {
-            mainAndSplit();
-            evaluation();
-        } else {
-            // TODO
-        }
         var data = "{"
             + "\n" + out
             + "\n\"numResults\":" + $scope.numResults + ","
