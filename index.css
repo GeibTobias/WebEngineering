@@ -180,6 +180,7 @@
     text-align: left;
     font-size: 1vw;
     text-overflow: ellipsis;
+    overflow-x: scroll;
 }
 
 .checkbox{
